@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DiseaseCategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +42,10 @@ Route::group(['prefix' => 'tag','as' => 'tag.'],function(){
     Route::delete('/{topicId}/delete',[TagController::class,'delete'])->name('delete');
 });
 
+Route::group(['prefix' => 'product','as' => 'product.'],function(){
+    Route::get('/',[ProductController::class,'getList'])->name('getList');
+    Route::get('/{productId}',[ProductController::class,'getDetail'])->name('getDetail');
+    Route::post('/create',[ProductController::class,'create'])->name('create');
+    Route::post('/{productId}/update',[ProductController::class,'update'])->name('update');
+    Route::delete('/{productId}/delete',[ProductController::class,'delete'])->name('delete');
+});
