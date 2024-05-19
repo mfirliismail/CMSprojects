@@ -27,4 +27,25 @@ use Illuminate\Database\Eloquent\Model;
 class ProductCategory extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'parent_id', 
+        'name',
+    ];
+
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function children()
+    {
+        return $this->hasMany(ProductCategory::class, 'parent_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(ProductCategory::class, 'parent_id');
+    }
+
 }

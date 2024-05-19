@@ -3,9 +3,11 @@
 use App\Http\Controllers\DiseaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DiseaseCategoryController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\DiseaseCategoryController;
+use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\TopicController;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +43,11 @@ Route::group(['prefix' => 'tag','as' => 'tag.'],function(){
     Route::delete('/{topicId}/delete',[TagController::class,'delete'])->name('delete');
 });
 
+Route::group(['prefix' => 'product-category','as' => 'product-category.'],function(){
+    Route::get('/',[ProductCategoryController::class,'getList'])->name('getList');
+    Route::get('/{productCategoryId}',[ProductCategoryController::class,'getDetail'])->name('getDetail');
+    Route::post('/create',[ProductCategoryController::class,'create'])->name('create');
+    Route::post('/{productCategoryId}/update',[ProductCategoryController::class,'update'])->name('update');
+    Route::delete('/{productCategoryId}/delete',[ProductCategoryController::class,'delete'])->name('delete');
+    Route::post('/{productCategoryId}/slug',[ProductCategoryController::class,'enableDisable'])->name('enableDisable');
+});
