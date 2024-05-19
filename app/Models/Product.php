@@ -32,7 +32,30 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
+
 class Product extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'product_category_id',
+        'name',
+        'description',
+        'type',
+        'image',
+        'content',
+    ];
+
+    /**
+     * Get the category that owns the product.
+     */
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'product_category_id');
+    }
 }
