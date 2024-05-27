@@ -9,10 +9,9 @@ class ProductService{
 
     public function getProductList($search = NULL,$paginate = NULL){
 
-        $productList = Product::when($search !== NULL,fn($q) => $q->whereAny([
+        $productList = Product::with(['category', 'tag'])->when($search !== NULL,fn($q) => $q->whereAny([
             'name',
-            'description'
-        ], 'LIKE', '%'.$search.'%'));
+            ], 'iLIKE', '%'.$search.'%'));
 
         if($paginate !== NULL){
             // get() =>  untuk mereturn semua data di database
@@ -26,31 +25,35 @@ class ProductService{
         // first untuk return 1 data
         $product = Product::where('id',$productId)->first();
         if($product === NULL){
-            throw new ProductException('Data tidak ada');
+            throw ProductException::notFound();
         }
 
         return $product;
     }
 
-    public function createProduct($product_category_id, $name, $description, $type, $image, $content){
+    public function createProduct($product_category_id, $tag_id, $name, $code, $description, $type, $image, $content){
         // $slug = Str::slug($name); // Str::slug => Helper laravel untuk membuat slug
         // $diseaseCategory = DiseaseCategory::where('slug',$slug)->first();
-        $diseaseCategory = Product::create([
+
+        $product = Product::create([
             'product_category_id' => $product_category_id,
+            'tag_id' => $tag_id,
             'name' => $name,
+            'code' => $code,
             'description' => $description,
             'type' => $type,
             'image' => $image,
             'content' => $content,
+            'is_active' => true,
         ]);
-        return $diseaseCategory;
+        return $product;
     }
 
     public function updateProduct($productId,$name, $description, $type, $image, $content){
         $product = Product::where('id',$productId)->first();
         // Validasi jika data belum, maka return error (bisa di lakukan di validasi awal)
         if($product === NULL){
-            throw new ProductException('Data tidak ada');
+            throw ProductException::notFound();
         }
         $product->update([
             'name' => $name,
@@ -67,9 +70,26 @@ class ProductService{
         $product = Product::where('id',$productId);
         // Validasi jika data belum, maka return error (bisa di lakukan di validasi awal)
         if($product === NULL){
-            throw new ProductException('Data tidak ada');
+            throw ProductException::notFound();
         }
         $product->delete();
+        return true;
+    }
+
+    public function enableDisable($productId){
+      // Temukan produk berdasarkan ID
+      $product = Product::find($productId);
+
+      // Validasi jika produk tidak ditemukan, maka return error
+      if ($product === null) {
+        throw ProductException::notFound();
+      }
+  
+      // Toggle nilai is_active
+      $product->is_active = !$product->is_active;
+      
+      // Simpan perubahan
+      $product->save();
         return true;
     }
 

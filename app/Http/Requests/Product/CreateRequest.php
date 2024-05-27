@@ -22,11 +22,12 @@ class CreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_category_id' => ['required', 'integer'],
-            'name' => ['required', 'string'],
+            'product_category_id' => ['required', 'integer', 'exists:product_categories,id'],
+            'tag_id' => ['required', 'integer', 'exists:tags,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'type' => ['required', 'integer'],
-            'image' => ['required', 'string'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'], // Gambar dengan format jpeg, png, jpg, atau gif dan maksimum 2MB
             'content' => ['required', 'string'],
         ];
     }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\ProductCategoryException;
+use App\Exceptions;
 use App\Http\Requests\ProductCategory\CreateRequest;
 use App\Http\Requests\ProductCategory\GetListRequest;
 use App\Http\Requests\ProductCategory\UpdateRequest;
@@ -24,8 +24,8 @@ class ProductCategoryController extends Controller
                     paginate:$request->paginate,
                 )
             );
-        }catch(ProductCategoryException $e){
-            return new ErrorResource($e->getMessage());
+        }catch(Exceptions $e){
+            return new ErrorResource($e->getMessage(), $e->getCode());
         }
 
     }
@@ -38,18 +38,18 @@ class ProductCategoryController extends Controller
                     productCategoryId:$productCategoryId,
                 )
             );
-        }catch(ProductCategoryException $e){
-            return new ErrorResource($e->getMessage());
+        }catch(Exceptions $e){
+            return new ErrorResource($e->getMessage(), $e->getCode());
         }
     }
 
     public function create(CreateRequest $request){
         try{
             return new ProductCategoryResource(
-                (new ProductCategoryService)->createProductCategory(name:$request->name, parent_id:$request->parent_id)
+                (new ProductCategoryService)->createProductCategory(name:$request->name, parent_id:$request->parent_id, is_active:true)
             );
-        }catch(ProductCategoryException $e){
-            return new ErrorResource($e->getMessage());
+        }catch(Exceptions $e){
+            return new ErrorResource($e->getMessage(), $e->getCode());
         }
     }
 
@@ -62,8 +62,8 @@ class ProductCategoryController extends Controller
                     parent_id:$request->parent_id
                 )
             );
-        }catch(ProductCategoryException $e){
-            return new ErrorResource($e->getMessage());
+        }catch(Exceptions $e){
+            return new ErrorResource($e->getMessage(), $e->getCode());
         }
     }
 
@@ -74,8 +74,8 @@ class ProductCategoryController extends Controller
                 message:'Success Delete'
             );
 
-        }catch(ProductCategoryException $e){
-            return new ErrorResource($e->getMessage());
+        }catch(Exceptions $e){
+            return new ErrorResource($e->getMessage(), $e->getCode());
         }
     }
 
@@ -83,9 +83,9 @@ class ProductCategoryController extends Controller
         try{
             return new ProductCategoryResource(
                 (new ProductCategoryService)->toggleProductCategoryStatus($productCategoryId)
-            );
-        }catch(ProductCategoryException $e){
-            return new ErrorResource($e->getMessage());
+            );  
+        }catch(Exceptions $e){
+            return new ErrorResource($e->getMessage(), $e->getCode());
         }
     }
     

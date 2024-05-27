@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Http\JsonResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -26,5 +27,23 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+    public function render($request, Throwable $exception)
+    {
+
+        $code = 500;
+        $message = $exception->getMessage();
+        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+            $code = 422;
+            $message = array_map(fn ($v) => $v[0], $exception->errors());
+        } else if ($exception instanceof \Symfony\Component\Routing\Exception\RouteNotFoundException) {
+            $code = 404;
+            $message = 'Route not found';
+        }
+        return new JsonResponse([
+            'message' => $exception->getMessage(),
+            'status' => $exception->getCode(),
+            'data' => NULL
+        ], $exception->getCode());
     }
 }

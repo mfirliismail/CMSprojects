@@ -4,7 +4,8 @@ namespace App\Exceptions;
 
 use Exception;
 
-class ProductCategoryException extends Exception
+class ProductCategoryException extends Exceptions
 {
-    //
+
+    
 }

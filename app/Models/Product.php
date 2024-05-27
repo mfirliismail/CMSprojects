@@ -44,7 +44,9 @@ class Product extends Model
      */
     protected $fillable = [
         'product_category_id',
+        'tag_id',
         'name',
+        'code',
         'description',
         'type',
         'image',
@@ -57,5 +59,15 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(ProductCategory::class, 'product_category_id');
+    }
+    
+    public function tag()
+    {
+        return $this->belongsTo(Tag::class, 'tag_id');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? url('images/products/' . $this->image) : null;
     }
 }
