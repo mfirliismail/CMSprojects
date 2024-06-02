@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\DiseaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DiseaseCategoryController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\FAQsController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\DiseaseController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\FAQsCategoryController;
+use App\Http\Controllers\DiseaseCategoryController;
 use App\Http\Controllers\ProductCategoryController;
 
 /*
@@ -62,4 +64,24 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::delete('/{productCategoryId}/delete', [ProductCategoryController::class, 'delete'])->name('delete');
         Route::post('/{productCategoryId}/slug', [ProductCategoryController::class, 'enableDisable'])->name('enableDisable');
     });
+
+    Route::group(['prefix' => 'faqs-category','as' => 'faqs-category.'],function(){
+        Route::get('/',[FAQsCategoryController::class,'getList'])->name('getList');
+        Route::get('/{faqsCategoryId}',[FAQsCategoryController::class,'getDetail'])->name('getDetail');
+        Route::post('/create',[FAQsCategoryController::class,'create'])->name('create');
+        Route::post('/{faqsCategoryId}/update',[FAQsCategoryController::class,'update'])->name('update');
+        Route::delete('/{faqsCategoryId}/delete',[FAQsCategoryController::class,'delete'])->name('delete');
+        Route::post('/{faqsCategoryId}/slug',[FAQsCategoryController::class,'enableDisable'])->name('enableDisable');
+    });
+
+    Route::group(['prefix' => 'faqs','as' => 'faqs.'],function(){
+        Route::get('/',[FAQsController::class,'getList'])->name('getList');
+        Route::get('/{faqsId}',[FAQsController::class,'getDetail'])->name('getDetail');
+        Route::post('/create',[FAQsController::class,'create'])->name('create');
+        Route::post('/{faqsId}/update',[FAQsController::class,'update'])->name('update');
+        Route::delete('/{faqsId}/delete',[FAQsController::class,'delete'])->name('delete');
+        Route::post('/{faqsId}/slug',[FAQsController::class,'enableDisable'])->name('enableDisable');
+    });
+    
 });
+

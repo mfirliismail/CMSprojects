@@ -44,6 +44,6 @@ class Handler extends ExceptionHandler
             'message' => $exception->getMessage(),
             'status' => $exception->getCode(),
             'data' => NULL
-        ], $exception->getCode());
+        ]);
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\FAQsCategory;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -13,8 +14,11 @@ return new class extends Migration
     {
         Schema::create('faqs', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(FaqsCategory::class)->constrained()->nullOnDelete();
             $table->string('question');
-            $table->text('answer');
+            $table->string('code');
+            $table->longText('answer');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

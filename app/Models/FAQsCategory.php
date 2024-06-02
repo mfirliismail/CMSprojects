@@ -13,7 +13,11 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-class FAQ extends Model
+class FaqsCategory extends Model
 {
     use HasFactory;
+
+    protected $fillable = [ 
+        'name',
+    ];
 }
